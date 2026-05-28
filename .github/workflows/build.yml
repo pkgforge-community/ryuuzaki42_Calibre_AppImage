@@ -40,6 +40,11 @@ jobs:
         echo '#!/bin/bash
         HERE="$(dirname "$(readlink -f "${0}")")"
         cd /"$HERE"/calibre/
+
+        if [ ! -f /usr/lib/x86_64-linux-gnu/libxcb-cursor.so.0 ] && [ ! -f /usr/lib64/libxcb-cursor.so.0 ]; then # Check if has libxcb-cursor
+            export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HERE/calibre/libxcb-cursor/
+        fi
+
         ./calibre' > AppRun
         chmod +x AppRun
 
@@ -54,7 +59,8 @@ jobs:
         pwd; ls -lah
 
         ## Add libxcb-cursor from Ubuntu
-        cd calibre/lib/
+        cd calibre/
+        mkdir libxcb-cursor/; cd libxcb-cursor/
         wget -q https://github.com/ryuuzaki42/Calibre_AppImage/releases/download/main-00000000/libxcb-cursor.so.0.0.0
         ln -s libxcb-cursor.so.0.0.0 libxcb-cursor.so.0
         pwd; ls -lah
